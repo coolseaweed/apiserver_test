@@ -40,6 +40,6 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_BASIC_ENABLED=false
     volumes:
-      - ./dashboards:/var/lib/grafana/dashboards
-      - ./config/grafana-dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
-      - ./config/grafana-datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./config/grafana/influx/k6-load-testing-results_rev3.json:/var/lib/grafana/dashboards/k6-load-testing-results_rev3.json
+      - ./config/grafana/influx/dashboards:/etc/grafana/provisioning/dashboards/
+      - ./config/grafana/influx/datasources:/etc/grafana/provisioning/datasources/
