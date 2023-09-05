@@ -14,8 +14,8 @@ ENV work_dir="/workspace"
 WORKDIR ${work_dir}
 COPY server ${work_dir}/server
 COPY requirements.txt ${work_dir}/requirements.txt
-COPY api_run.py ${work_dir}/run.py
+COPY run_api.py ${work_dir}/run_api.py
 
 RUN pip install -r requirements.txt
 
-CMD ["python", "run.py"]
+CMD ["python", "run_api.py"]

@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  # --------- API SERVER SETUP  ---------- #
+  api-server:
+    image: api-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "10080:8080"
+
+    # tty: true
+    # command: /bin/bash
+    volumes:
+      - ./:/workspace
+
+  # --------- k6 TEST SETUP ---------- #
+  influxdb:
+    image: influxdb:1.8.0
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=k6
+
+  k6:
+    image: loadimpact/k6:latest
+    depends_on:
+      - api-server
+    ports:
+      - "6565:6565"
+    environment:
+      - K6_OUT=influxdb=http://influxdb:8086/k6
+      # - K6_PROMETHEUS_RW_SERVER_URL=http://prometheus:9090/api/v1/write
+    volumes:
+      - ./run_k6.js:/scripts/run_k6.js
+    command: "run /scripts/run_k6.js"
+
+  # --------- grafana SETUP ---------- #
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    volumes:
+      - ./dashboards:/var/lib/grafana/dashboards
+      - ./config/grafana-dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
+      - ./config/grafana-datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
