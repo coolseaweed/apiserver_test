@@ -4,14 +4,12 @@ services:
 
   k6:
     image: loadimpact/k6:0.42.0
-    depends_on:
-      - api-server
-      - prometheus
     # ports:
     #   - "6565:6565"
     environment:
       - K6_PROMETHEUS_RW_SERVER_URL=http://prometheus:9090/api/v1/write
       - K6_PROMETHEUS_RW_TREND_AS_NATIVE_HISTOGRAM=true
     volumes:
-      - ./run_k6.js:/scripts/run_k6.js
-    command: "run /scripts/run_k6.js -o experimental-prometheus-rw"
+      - ./scripts:/scripts/
+
+    command: "run /scripts/test_api.js -o experimental-prometheus-rw"

@@ -1,14 +1,6 @@
 version: '3.9'
 
 services:
-  # --------- API SERVER SETUP  ---------- #
-  api-server:
-    image: api-server
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "10080:8080"
 
   # --------- k6 TEST SETUP ---------- #
   influxdb:
